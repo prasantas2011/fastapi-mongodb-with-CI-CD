@@ -43,7 +43,9 @@ jobs:
 
       - name: Run tests & generate HTML coverage
         run: |
-          pytest --cov=app --cov-report=term-missing --cov-report=html
+          # pytest --cov=app --cov-report=term-missing --cov-report=html
+          # Updated command with fail-on-threshold
+          pytest --cov=app --cov-report=term-missing --cov-report=html --cov-fail-under=80
 
       - name: Upload coverage HTML artifact
         uses: actions/upload-artifact@v4
