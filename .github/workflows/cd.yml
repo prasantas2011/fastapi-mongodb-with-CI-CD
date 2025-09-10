@@ -1,6 +1,6 @@
+# ✅ Trigger this workflow after CI workflow completes successfully
 name: FastAPI CD
 
-# ✅ Trigger this workflow after CI workflow completes successfully
 on:
   workflow_run:
     workflows: ["FastAPI CI"]   # Replace with the exact name of your CI workflow
@@ -30,14 +30,9 @@ jobs:
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           script: |
-            set -e
             cd /home/ubuntu/fastapi-app
-            git reset --hard
-            git pull origin main
-            if [ ! -d "venv" ]; then
-                python3 -m venv venv
-            fi
+            git pull
             source venv/bin/activate
-            python -m pip install --upgrade pip
             pip install -r requirements.txt
+            # Restart FastAPI service (systemd)
             sudo systemctl restart fastapi-app
