@@ -1,4 +1,3 @@
 ﻿# fastapi-mongodb-with-CI-CD
 
- test me once with CI
 
