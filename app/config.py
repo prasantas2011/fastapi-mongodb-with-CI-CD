@@ -1,7 +1,7 @@
 """
 configuration module for FastAPI project.
 
-Contains all env settings
+Contains all env settings sample test
 """
 import os
 from dotenv import load_dotenv
