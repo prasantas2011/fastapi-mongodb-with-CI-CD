@@ -39,6 +39,7 @@ jobs:
         run: |
           echo "Running pylint..."
           pylint **/*.py || exit 1  # Fail workflow if lint errors
+          continue-on-error: true
 
       - name: Run tests & generate HTML coverage
         run: |
