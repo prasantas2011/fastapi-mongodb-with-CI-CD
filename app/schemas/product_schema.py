@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,ConfigDict
 from app.database import PyObjectId
 
 class ProductSchema(BaseModel):
@@ -7,7 +7,8 @@ class ProductSchema(BaseModel):
     price: float
     stock: int
 
-    class Config:
-        populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {PyObjectId: str}
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={PyObjectId: str}
+    )

@@ -1,5 +1,5 @@
 from typing import Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field,ConfigDict
 from app.database import PyObjectId
 
 class OrderItem(BaseModel):
@@ -12,7 +12,8 @@ class Order(BaseModel):
     items: List[OrderItem]
     total: float
 
-    class Config:
-        populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {PyObjectId: str}
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={PyObjectId: str}
+    )
