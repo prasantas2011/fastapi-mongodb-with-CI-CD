@@ -1,12 +1,16 @@
 name: FastAPI CD
 
+# ✅ Trigger this workflow after CI workflow completes successfully
 on:
-  push:
-    branches: [ main ]        # deploy only from main branch
-  workflow_dispatch:          # optional manual trigger
+  workflow_run:
+    workflows: ["FastAPI CI"]   # Replace with the exact name of your CI workflow
+    types:
+      - completed
 
 jobs:
   deploy:
+    # ✅ Runs only if the CI workflow was successful
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -26,9 +30,14 @@ jobs:
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           script: |
+            set -e
             cd /home/ubuntu/fastapi-app
-            git pull
+            git reset --hard
+            git pull origin main
+            if [ ! -d "venv" ]; then
+                python3 -m venv venv
+            fi
             source venv/bin/activate
+            python -m pip install --upgrade pip
             pip install -r requirements.txt
-            # Restart FastAPI service (systemd)
             sudo systemctl restart fastapi-app

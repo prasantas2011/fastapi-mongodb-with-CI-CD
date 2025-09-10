@@ -1,4 +1,4 @@
-name: FastAPI CI/CD
+name: FastAPI CI
 
 on:
   push:
