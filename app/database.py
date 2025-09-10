@@ -40,3 +40,4 @@ class PyObjectId(ObjectId):
         Returns OpenAPI/JSON Schema as a string type.
         """
         return {"type": "string"}
+    
