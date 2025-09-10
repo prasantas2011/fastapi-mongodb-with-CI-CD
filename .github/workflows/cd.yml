@@ -1,0 +1,34 @@
+name: FastAPI CD
+
+on:
+  push:
+    branches: [ main ]        # deploy only from main branch
+  workflow_dispatch:          # optional manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # Deploy via SSH to AWS EC2
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_EC2_USER }}
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/fastapi-app
+            git pull
+            source venv/bin/activate
+            pip install -r requirements.txt
+            # Restart FastAPI service (systemd)
+            sudo systemctl restart fastapi-app
